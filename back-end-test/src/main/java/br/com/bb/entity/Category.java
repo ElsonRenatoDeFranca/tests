@@ -33,7 +33,7 @@ public class Category {
     @Column(name = "CATEGORY_NAME", length = 50)
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Product> products;
 
 }
