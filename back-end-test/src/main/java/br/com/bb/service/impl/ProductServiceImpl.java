@@ -1,10 +1,14 @@
 package br.com.bb.service.impl;
 
 import br.com.bb.constants.DemoAppConstants;
+import br.com.bb.entity.Category;
 import br.com.bb.entity.Product;
+import br.com.bb.exception.CategoryNotFoundException;
 import br.com.bb.exception.ProductAlreadyExistsException;
 import br.com.bb.exception.ProductNotFoundException;
+import br.com.bb.repository.CategoryRepository;
 import br.com.bb.repository.ProductRepository;
+import br.com.bb.service.ICategoryService;
 import br.com.bb.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,19 +29,16 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     public RestTemplate restTemplate;
 
-    @Value("${product.url}")
-    private String remoteProductUrl;
-
-    @Override
-    @Cacheable("products")
-    public Product getProductById(Long productId) {
-        ResponseEntity<Product> responseEntity = this.restTemplate.exchange(remoteProductUrl + productId, HttpMethod.GET, new HttpEntity<>(new HttpHeaders()), Product.class);
-        Product productResult = responseEntity.getBody();
-        return productResult;
-    }
+    @Autowired
+    private IProductService productService;
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ICategoryService categoryService;
+
+
 
     @Override
     public Product findProductById(Long id) throws ProductNotFoundException {
@@ -45,6 +46,19 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public List<Product> findProductByCategoryId(Long id) throws ProductNotFoundException, CategoryNotFoundException {
+        Category category = categoryService.findCategoryById(id);
+
+        if(category != null){
+            return category.getProducts();
+        }else{
+            throw new ProductNotFoundException(DemoAppConstants.PRODUCT_NOT_FOUND_ERROR_MESSAGE);
+        }
+
+    }
+
+    @Override
+    @Cacheable("products")
     public List<Product> findAll() throws ProductNotFoundException {
         List<Product> products = new ArrayList<>();
         productRepository.findAll().forEach(products::add);

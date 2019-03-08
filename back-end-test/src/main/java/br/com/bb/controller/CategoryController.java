@@ -70,7 +70,7 @@ public class CategoryController {
     }
 
 
-    @RequestMapping(method=RequestMethod.GET,value="/product/listByCategory/{categoryId}")
+    @RequestMapping(method=RequestMethod.GET,value="/category/categoryId}")
     public ResponseEntity<Category> findCategoryById(@PathVariable Long categoryId){
 
         try {

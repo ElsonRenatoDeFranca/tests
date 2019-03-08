@@ -1,6 +1,7 @@
 package br.com.bb.controller;
 
 import br.com.bb.entity.Product;
+import br.com.bb.exception.CategoryNotFoundException;
 import br.com.bb.exception.ProductAlreadyExistsException;
 import br.com.bb.exception.ProductNotFoundException;
 import br.com.bb.service.IProductService;
@@ -70,6 +71,18 @@ public class ProductController {
             return new ResponseEntity<>(product, HttpStatus.OK);
 
         }catch(ProductNotFoundException cartEx){
+            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(method=RequestMethod.GET,value="/product/listByCategory/{id}")
+    public ResponseEntity<List<Product>> findProductByCategoryId(@PathVariable Long id){
+
+        try {
+            List<Product> products = productService.findProductByCategoryId(id);
+            return new ResponseEntity<>(products, HttpStatus.OK);
+
+        }catch(ProductNotFoundException | CategoryNotFoundException exception){
             return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
         }
     }

@@ -1,14 +1,13 @@
 package br.com.bb.service;
 
 import br.com.bb.entity.Product;
+import br.com.bb.exception.CategoryNotFoundException;
 import br.com.bb.exception.ProductAlreadyExistsException;
 import br.com.bb.exception.ProductNotFoundException;
 
 import java.util.List;
 
 public interface IProductService {
-
-    Product getProductById(Long productId);
 
     /**
      *
@@ -17,6 +16,15 @@ public interface IProductService {
      * @throws ProductNotFoundException
      */
     Product findProductById(Long id) throws ProductNotFoundException;
+
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws ProductNotFoundException
+     */
+    List<Product> findProductByCategoryId(Long id) throws ProductNotFoundException, CategoryNotFoundException;
 
     /**
      *

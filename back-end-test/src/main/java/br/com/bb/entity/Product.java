@@ -37,18 +37,7 @@ public class Product {
     @Column(name = "PRODUCT_COST", length = 30)
     private Double cost;
 
-    /*@ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "products")
-            */
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
+    @ManyToMany
     private List<Category> categories = new ArrayList();
 
 }
