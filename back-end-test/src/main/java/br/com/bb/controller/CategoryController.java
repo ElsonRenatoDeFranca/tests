@@ -65,7 +65,7 @@ public class CategoryController {
     }
 
     @RequestMapping(value ="/category/{letter}/products", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Category> findCategoryByLetterOccurrence(@PathVariable(name="letter") char letter) throws CategoryNotFoundException, ProductNotFoundException {
+    public List<String> findCategoryByLetterOccurrence(@PathVariable(name="letter") char letter) throws CategoryNotFoundException, ProductNotFoundException {
         return categoryService.findCategoryByLetterOccurrence(letter);
     }
 

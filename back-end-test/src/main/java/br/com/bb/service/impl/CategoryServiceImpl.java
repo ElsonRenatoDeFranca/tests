@@ -68,7 +68,7 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public List<Category> findCategoryByLetterOccurrence(char letter) throws CategoryNotFoundException {
+    public List<String> findCategoryByLetterOccurrence(char letter) throws CategoryNotFoundException {
 
         List<Category> categories = new ArrayList<>();
 
@@ -77,9 +77,12 @@ public class CategoryServiceImpl implements ICategoryService {
         categories.forEach(category -> map.put(category.getName(), category.getName().chars().filter(character -> character == letter).count()));
         List<String> maxOccurrencesOfLetter = getListOfMaxOccurrencesOfOneLetter(map);
 
-        return maxOccurrencesOfLetter.stream().
+
+        return maxOccurrencesOfLetter;
+        /*return maxOccurrencesOfLetter.stream().
                 map((element -> categoryRepository.findByname(element))).
                 findAny().orElse(new ArrayList<>());
+                */
     }
 
     @Override
