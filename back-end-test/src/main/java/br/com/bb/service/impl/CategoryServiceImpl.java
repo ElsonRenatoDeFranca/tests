@@ -44,6 +44,9 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public Category findCategoryById(Long id) throws CategoryNotFoundException {
+
+        Category category = categoryRepository.findByid(id);
+        List<Product> prod = category.getProducts();
         return Optional.of(categoryRepository.findOne(id)).orElseThrow(() -> new CategoryNotFoundException(DemoAppConstants.CATEGORY_NOT_FOUND_ERROR_MESSAGE));
     }
 

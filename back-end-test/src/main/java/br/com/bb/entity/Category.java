@@ -2,6 +2,8 @@ package br.com.bb.entity;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import java.util.List;
 
@@ -19,7 +23,8 @@ import java.util.List;
 
 
 @Entity(name = "CATEGORY")
-@Data
+@Getter
+@Setter
 public class Category {
 
     @Id
@@ -33,7 +38,13 @@ public class Category {
     @Column(name = "CATEGORY_NAME", length = 50)
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "PRODUCT_CATEGORY",
+            joinColumns = { @JoinColumn(name = "CATEGORY_ID") },
+            inverseJoinColumns = { @JoinColumn(name = "ID") })
     private List<Product> products;
-
 }
