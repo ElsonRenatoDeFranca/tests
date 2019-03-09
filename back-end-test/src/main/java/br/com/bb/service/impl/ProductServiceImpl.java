@@ -27,9 +27,6 @@ import java.util.List;
 public class ProductServiceImpl implements IProductService {
 
     @Autowired
-    public RestTemplate restTemplate;
-
-    @Autowired
     private IProductService productService;
 
     @Autowired

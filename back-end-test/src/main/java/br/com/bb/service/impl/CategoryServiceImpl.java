@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -44,7 +46,14 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public Category findCategoryById(Long id) throws CategoryNotFoundException {
-        return Optional.of(categoryRepository.findOne(id)).orElseThrow(() -> new CategoryNotFoundException(DemoAppConstants.CATEGORY_NOT_FOUND_ERROR_MESSAGE));
+        return Optional.of(categoryRepository.findByid(id)).orElseThrow(() -> new CategoryNotFoundException(DemoAppConstants.CATEGORY_NOT_FOUND_ERROR_MESSAGE));
+    }
+
+    @Override
+    public Category findCategoryByName(String name) throws CategoryNotFoundException {
+        Category category = this.categoryRepository.findByname(name);
+
+        return category;
     }
 
     private Long getMaxNumberOfLetters(TreeMap<String, Long> map){
@@ -67,22 +76,34 @@ public class CategoryServiceImpl implements ICategoryService {
 
     }
 
+    private boolean isLetterIgnoreCase(char letter){
+
+        if(Character.isUpperCase(letter) ||  Character.isLowerCase(letter)){
+            return true;
+        }
+        return false;
+    }
     @Override
-    public List<String> findCategoryByLetterOccurrence(char letter) throws CategoryNotFoundException {
+    public List<Category> findCategoryByLetterOccurrence(char letter) throws CategoryNotFoundException {
 
         List<Category> categories = new ArrayList<>();
 
+        List<Category> categoryList = new ArrayList<>();
+
         categoryRepository.findAll().forEach(categories::add);
         TreeMap<String, Long> map = new TreeMap<>();
-        categories.forEach(category -> map.put(category.getName(), category.getName().chars().filter(character -> character == letter).count()));
+        categories.forEach(category -> map.put(category.getName(), category.getName().chars().filter(character -> isLetterIgnoreCase(letter)).count()));
         List<String> maxOccurrencesOfLetter = getListOfMaxOccurrencesOfOneLetter(map);
 
+        if(maxOccurrencesOfLetter != null){
+            for(String categoryName : maxOccurrencesOfLetter){
+                Category cat = this.findCategoryByName(categoryName);
+                categoryList.add(cat);
+            }
 
-        return maxOccurrencesOfLetter;
-        /*return maxOccurrencesOfLetter.stream().
-                map((element -> categoryRepository.findByname(element))).
-                findAny().orElse(new ArrayList<>());
-                */
+        }
+
+        return categoryList;
     }
 
     @Override

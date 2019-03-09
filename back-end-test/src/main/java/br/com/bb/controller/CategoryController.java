@@ -65,13 +65,13 @@ public class CategoryController {
     }
 
     @RequestMapping(value ="/category/{letter}/products", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<String> findCategoryByLetterOccurrence(@PathVariable(name="letter") char letter) throws CategoryNotFoundException, ProductNotFoundException {
+    public List<Category> findCategoryByLetterOccurrence(@PathVariable(name="letter") char letter) throws CategoryNotFoundException, ProductNotFoundException {
         return categoryService.findCategoryByLetterOccurrence(letter);
     }
 
 
-    @RequestMapping(method=RequestMethod.GET,value="/category/categoryId}")
-    public ResponseEntity<Category> findCategoryById(@PathVariable Long categoryId){
+    @RequestMapping(method=RequestMethod.GET,value="/category/{categoryId}")
+    public ResponseEntity<Category> findCategoryByCategoryId(@PathVariable Long categoryId){
 
         try {
             Category category = categoryService.findCategoryById(categoryId);
@@ -83,6 +83,21 @@ public class CategoryController {
 
 
     }
+
+    @RequestMapping(method=RequestMethod.GET,value="/category/{name}")
+    public ResponseEntity<Category> findCategoryByCategoryName(@PathVariable String name){
+
+        try {
+            Category category = categoryService.findCategoryByName(name);
+            return new ResponseEntity<>(category, HttpStatus.OK);
+
+        }catch(CategoryNotFoundException catEx){
+            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        }
+
+
+    }
+
 
 
     private Category getDummyCategory(Long categoryId){
