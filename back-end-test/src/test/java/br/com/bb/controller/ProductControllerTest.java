@@ -70,4 +70,18 @@ public class ProductControllerTest {
 		.andExpect(jsonPath("$[2].id", is(8)))
 		.andExpect(jsonPath("$[2].name", is("Estante")));
 	}
+
+	@Test
+	public void listCategoriesByLetterOccurrence() throws Exception {
+		mockMvc.perform(get("/category/m/products"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(2)))
+
+				.andExpect(jsonPath("$[0].id", is(1)))
+				.andExpect(jsonPath("$[0].name", is("Alimentos")))
+
+				.andExpect(jsonPath("$[1].id", is(2)))
+				.andExpect(jsonPath("$[1].name", is("Eletrodomésticos")));
+	}
+
 }

@@ -1,4 +1,4 @@
-package br.com.bb.controller;
+package br.com.bb.services;
 
 import br.com.bb.entity.Category;
 import br.com.bb.entity.Product;
@@ -7,7 +7,6 @@ import br.com.bb.repository.CategoryRepository;
 import br.com.bb.service.ICategoryService;
 import br.com.bb.service.IProductService;
 import br.com.bb.service.impl.CategoryServiceImpl;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,12 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -39,7 +34,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * Created by e068635 on 2/27/2019.

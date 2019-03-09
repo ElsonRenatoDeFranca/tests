@@ -68,11 +68,12 @@ public class CategoryServiceImpl implements ICategoryService {
 
         Long maxNumberOfOccurrence = getMaxNumberOfLetters(map);
 
-        return map.entrySet()
+       return map.entrySet()
                 .stream()
                 .filter(entry -> entry.getValue() == maxNumberOfOccurrence && maxNumberOfOccurrence > 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+
 
     }
 
@@ -83,16 +84,30 @@ public class CategoryServiceImpl implements ICategoryService {
         }
         return false;
     }
+
+    private static int countOccurrences(String str, char ch) {
+
+        int counter = 0;
+        Matcher matcher = Pattern.compile(String.valueOf(ch))
+                .matcher(str);
+
+        while (matcher.find()) {
+            counter++;
+        }
+
+        return counter;
+    }
+
     @Override
     public List<Category> findCategoryByLetterOccurrence(char letter) throws CategoryNotFoundException {
 
         List<Category> categories = new ArrayList<>();
-
         List<Category> categoryList = new ArrayList<>();
 
         categoryRepository.findAll().forEach(categories::add);
         TreeMap<String, Long> map = new TreeMap<>();
-        categories.forEach(category -> map.put(category.getName(), category.getName().chars().filter(character -> isLetterIgnoreCase(letter)).count()));
+
+        categories.forEach(category -> map.put(category.getName(), category.getName().chars().filter(ch -> ch == letter).count()));
         List<String> maxOccurrencesOfLetter = getListOfMaxOccurrencesOfOneLetter(map);
 
         if(maxOccurrencesOfLetter != null){
