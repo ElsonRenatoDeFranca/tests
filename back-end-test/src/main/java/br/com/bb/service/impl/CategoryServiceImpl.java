@@ -77,27 +77,6 @@ public class CategoryServiceImpl implements ICategoryService {
 
     }
 
-    private boolean isLetterIgnoreCase(char letter){
-
-        if(Character.isUpperCase(letter) ||  Character.isLowerCase(letter)){
-            return true;
-        }
-        return false;
-    }
-
-    private static int countOccurrences(String str, char ch) {
-
-        int counter = 0;
-        Matcher matcher = Pattern.compile(String.valueOf(ch))
-                .matcher(str);
-
-        while (matcher.find()) {
-            counter++;
-        }
-
-        return counter;
-    }
-
     @Override
     public List<Category> findCategoryByLetterOccurrence(char letter) throws CategoryNotFoundException {
 
