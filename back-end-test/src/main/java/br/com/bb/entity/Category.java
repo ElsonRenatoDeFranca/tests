@@ -45,6 +45,8 @@ public class Category {
             })
     @JoinTable(name = "PRODUCT_CATEGORY",
             joinColumns = { @JoinColumn(name = "CATEGORY_ID") },
-            inverseJoinColumns = { @JoinColumn(name = "ID") })
+            inverseJoinColumns = { @JoinColumn(name = "PRODUCT_ID") })
+
     private List<Product> products;
+
 }

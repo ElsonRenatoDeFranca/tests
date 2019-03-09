@@ -71,21 +71,6 @@ public class CategoryServiceTest {
         categories.add(mockCategory3);
     }
 
-
-    @Test
-    public void createCategory_shouldReturnEmptyCategory_whenCreateCategoryServiceIsInvoked() {
-
-        //When
-        when(categoryRepository.save(any(Category.class))).thenReturn(new Category());
-
-        Category category = new Category();
-
-        Category newCategory = categoryService.createCategory(category);
-
-        //Then
-        assertThat(newCategory, is(notNullValue()));
-    }
-
     @Test
     public void createCategory_shouldReturnCategory_whenCreateCategoryServiceIsInvoked() throws CategoryNotFoundException {
 
@@ -94,10 +79,10 @@ public class CategoryServiceTest {
         Long expectedId = 1000L;
 
         //When
-        when(categoryRepository.findByid(eq(expectedId))).thenReturn(Optional.of(mockCategory).get());
+        when(categoryRepository.findBycategoryId(eq(expectedId))).thenReturn(Optional.of(mockCategory).get());
         Category newCategory = categoryService.findCategoryById(expectedId);
 
-        verify(categoryRepository, times(1)).findByid(eq(expectedId));
+        verify(categoryRepository, times(1)).findBycategoryId(eq(expectedId));
 
         //Then
         assertThat(newCategory, is(notNullValue()));

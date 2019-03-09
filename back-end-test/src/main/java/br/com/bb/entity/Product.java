@@ -1,5 +1,6 @@
 package br.com.bb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,12 +22,12 @@ import java.util.List;
 public class Product {
 
     @Id
-    @Column(name = "PRODUCT_ID", nullable = false, updatable = false)
+    @Column(name = "ID", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long productId;
-
-    @Column(name = "ID", length = 20)
     private Long id;
+
+    @Column(name = "PRODUCT_ID", length = 20)
+    private Long productId;
 
     @Column(name = "PRODUCT_NAME", length = 50)
     private String name;
@@ -37,7 +38,9 @@ public class Product {
     @Column(name = "PRODUCT_COST", length = 30)
     private Double cost;
 
-    @ManyToMany
+    //@ManyToMany
+    @JsonIgnore
+    @ManyToMany(mappedBy = "products")
     private List<Category> categories = new ArrayList();
 
 }

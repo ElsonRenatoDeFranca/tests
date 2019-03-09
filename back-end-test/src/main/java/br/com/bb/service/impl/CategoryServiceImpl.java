@@ -2,9 +2,7 @@ package br.com.bb.service.impl;
 
 import br.com.bb.constants.DemoAppConstants;
 import br.com.bb.entity.Category;
-import br.com.bb.entity.Product;
 import br.com.bb.exception.CategoryNotFoundException;
-import br.com.bb.exception.ProductNotFoundException;
 import br.com.bb.repository.CategoryRepository;
 import br.com.bb.repository.ProductRepository;
 import br.com.bb.service.ICategoryService;
@@ -17,8 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -27,14 +23,6 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
-
-
-    @Autowired
-    private IProductService productService;
-
 
 
     @Override
@@ -45,15 +33,13 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public Category findCategoryById(Long id) throws CategoryNotFoundException {
-        return Optional.of(categoryRepository.findByid(id)).orElseThrow(() -> new CategoryNotFoundException(DemoAppConstants.CATEGORY_NOT_FOUND_ERROR_MESSAGE));
+    public Category findCategoryById(Long categoryId) throws CategoryNotFoundException {
+        return Optional.of(categoryRepository.findBycategoryId(categoryId)).orElseThrow(() -> new CategoryNotFoundException(DemoAppConstants.CATEGORY_NOT_FOUND_ERROR_MESSAGE));
     }
 
     @Override
     public Category findCategoryByName(String name) throws CategoryNotFoundException {
-        Category category = this.categoryRepository.findByname(name);
-
-        return category;
+        return this.categoryRepository.findByname(name);
     }
 
     private Long getMaxNumberOfLetters(TreeMap<String, Long> map){
@@ -86,7 +72,11 @@ public class CategoryServiceImpl implements ICategoryService {
         categoryRepository.findAll().forEach(categories::add);
         TreeMap<String, Long> map = new TreeMap<>();
 
-        categories.forEach(category -> map.put(category.getName(), category.getName().chars().filter(ch -> ch == letter).count()));
+        categories.forEach(category ->
+                map.put(category.getName(), category.getName().chars().
+                        filter(ch -> ch == letter).
+                        count()));
+
         List<String> maxOccurrencesOfLetter = getListOfMaxOccurrencesOfOneLetter(map);
 
         if(maxOccurrencesOfLetter != null){
@@ -98,38 +88,6 @@ public class CategoryServiceImpl implements ICategoryService {
         }
 
         return categoryList;
-    }
-
-    @Override
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
-    }
-
-    @Override
-    public Category addProductToCategory(Long categoryId, Product product) throws ProductNotFoundException, CategoryNotFoundException {
-        Product searchedProduct = productService.findProductById(product.getId());
-
-        Category category = findCategoryById(categoryId);
-
-        if (searchedProduct != null) {
-            category.getProducts().add(searchedProduct);
-            categoryRepository.save(category);
-        } else {
-            throw new ProductNotFoundException(DemoAppConstants.PRODUCT_NOT_FOUND_ERROR_MESSAGE);
-        }
-
-        return category;
-
-    }
-
-    @Override
-    public Category removeProductFromCategory(Long categoryId, Product product) throws ProductNotFoundException, CategoryNotFoundException {
-
-        Category category = findCategoryById(categoryId);
-        productRepository.delete(product);
-        category.getProducts().removeIf(product1 -> product.equals(product));
-
-        return category;
     }
 
 }
