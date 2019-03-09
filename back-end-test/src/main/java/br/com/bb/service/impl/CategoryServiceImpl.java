@@ -4,9 +4,7 @@ import br.com.bb.constants.DemoAppConstants;
 import br.com.bb.entity.Category;
 import br.com.bb.exception.CategoryNotFoundException;
 import br.com.bb.repository.CategoryRepository;
-import br.com.bb.repository.ProductRepository;
 import br.com.bb.service.ICategoryService;
-import br.com.bb.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +37,7 @@ public class CategoryServiceImpl implements ICategoryService {
 
     @Override
     public Category findCategoryByName(String name) throws CategoryNotFoundException {
-        return this.categoryRepository.findByname(name);
+        return Optional.of(categoryRepository.findByname(name)).orElseThrow(() -> new CategoryNotFoundException(DemoAppConstants.CATEGORY_NOT_FOUND_ERROR_MESSAGE));
     }
 
     private Long getMaxNumberOfLetters(TreeMap<String, Long> map){
